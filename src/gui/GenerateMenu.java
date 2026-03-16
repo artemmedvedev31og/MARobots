@@ -7,8 +7,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class GenerateMenu extends JFrame {
+
+    static Localization loc = new Localization();
+
     private static void setLookAndFeel(String className, Frame frame) {
         try {
             UIManager.setLookAndFeel(className);
@@ -24,6 +28,18 @@ public class GenerateMenu extends JFrame {
         menu.setMnemonic(keyIvent);
         menu.getAccessibleContext().setAccessibleDescription(description);
         return menu;
+    }
+
+    public static JMenuItem generateLanguageMenu(Frame frame, String title) {
+        JMenuItem menuItem = new JMenuItem(title);
+        menuItem.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loc.changeLanguage(title);
+                SwingUtilities.updateComponentTreeUI(frame);
+            }
+        });
+        return menuItem;
     }
 
     public static JMenuItem generateSystemAndCrossplatformLookAndFeel(Frame frame, String comp, String title) {
@@ -43,20 +59,31 @@ public class GenerateMenu extends JFrame {
         return addLogMessageItem;
     }
 
-    public static JMenuItem generateExitMenuItem(Frame frame, String message, String title) {
+    public static JMenuItem generateExitMenuItem(Frame frame, String message, String title, JDesktopPane desktopPane) {
         JMenuItem exitMenu = new JMenuItem("Выйти", KeyEvent.VK_E);
-        exitMenu.setMnemonic(KeyEvent.VK_E);
         exitMenu.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                UIManager.put("OptionPane.yesButtonText", "Да");
-                UIManager.put("OptionPane.noButtonText", "Нет");
-                int result = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
-                if (result == JOptionPane.YES_OPTION) {
-                    System.exit(0);
-                }
+                createConfirmExit(frame, message, title, desktopPane);
             }
         }));
         return exitMenu;
     }
+
+    public static void createConfirmExit(Frame frame, String message, String title, JDesktopPane desktopPane) {
+        UIManager.put("OptionPane.yesButtonText", "Да");
+        UIManager.put("OptionPane.noButtonText", "Нет");
+        State pos = new State();
+        int result = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
+
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                pos.writeState("position.txt", desktopPane);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.exit(0);
+        }
+    }
 }
+
