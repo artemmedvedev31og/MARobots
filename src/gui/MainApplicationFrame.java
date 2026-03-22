@@ -14,6 +14,7 @@ import static gui.GenerateMenu.*;
 public class MainApplicationFrame extends JFrame
 {
     private final JDesktopPane desktopPane = new JDesktopPane();
+    State pos = new State();
     
     public MainApplicationFrame() throws IOException, PropertyVetoException {
         State state = new State();
@@ -36,7 +37,7 @@ public class MainApplicationFrame extends JFrame
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        exitOnClose(this);
+        exitOnClose(this, desktopPane);
     }
     
     protected LogWindow createLogWindow()
@@ -79,10 +80,15 @@ public class MainApplicationFrame extends JFrame
         return menuBar;
     }
 
-    public void exitOnClose(Frame frame){
+    public void exitOnClose(Frame frame, JDesktopPane desktopPane){
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                try {
+                    pos.writeState(desktopPane);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
                 createConfirmExit(frame, "Вы хотите закрыть приложение?", "Выход из приложения", desktopPane);
             }
         });

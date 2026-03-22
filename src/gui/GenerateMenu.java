@@ -7,11 +7,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 
 public class GenerateMenu extends JFrame {
 
     static Localization loc = new Localization();
+    static State pos = new State();
 
     private static void setLookAndFeel(String className, Frame frame) {
         try {
@@ -64,7 +66,13 @@ public class GenerateMenu extends JFrame {
         exitMenu.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createConfirmExit(frame, message, title, desktopPane);
+                try {
+                    pos.writeState(desktopPane);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
+                WindowEvent windowEvent = new WindowEvent(frame, WindowEvent.WINDOW_CLOSING);
+                Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(windowEvent);
             }
         }));
         return exitMenu;
@@ -73,15 +81,9 @@ public class GenerateMenu extends JFrame {
     public static void createConfirmExit(Frame frame, String message, String title, JDesktopPane desktopPane) {
         UIManager.put("OptionPane.yesButtonText", "Да");
         UIManager.put("OptionPane.noButtonText", "Нет");
-        State pos = new State();
         int result = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
 
         if (result == JOptionPane.YES_OPTION) {
-            try {
-                pos.writeState("position.txt", desktopPane);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
             System.exit(0);
         }
     }
