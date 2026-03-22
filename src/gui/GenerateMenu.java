@@ -32,12 +32,12 @@ public class GenerateMenu extends JFrame {
         return menu;
     }
 
-    public static JMenuItem generateLanguageMenu(Frame frame, String title) {
+    public static JMenuItem generateLanguageMenu(Frame frame, String title, JMenuBar menuBar) {
         JMenuItem menuItem = new JMenuItem(title);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loc.changeLanguage(title);
+                loc.changeLanguage(title, menuBar);
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
@@ -61,8 +61,8 @@ public class GenerateMenu extends JFrame {
         return addLogMessageItem;
     }
 
-    public static JMenuItem generateExitMenuItem(Frame frame, String message, String title, JDesktopPane desktopPane) {
-        JMenuItem exitMenu = new JMenuItem("Выйти", KeyEvent.VK_E);
+    public static JMenuItem generateExitMenuItem(Frame frame, JDesktopPane desktopPane) {
+        JMenuItem exitMenu = new JMenuItem("Exit", KeyEvent.VK_E);
         exitMenu.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,7 +78,7 @@ public class GenerateMenu extends JFrame {
         return exitMenu;
     }
 
-    public static void createConfirmExit(Frame frame, String message, String title, JDesktopPane desktopPane) {
+    public static void createConfirmExit(Frame frame, String message, String title) {
         UIManager.put("OptionPane.yesButtonText", "Да");
         UIManager.put("OptionPane.noButtonText", "Нет");
         int result = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
