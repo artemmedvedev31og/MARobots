@@ -1,6 +1,8 @@
 package gui;
 
+import log.Logger;
 import javax.swing.*;
+import java.awt.*;
 import java.beans.PropertyVetoException;
 import java.io.*;
 
@@ -43,12 +45,46 @@ public class State {
             for(int i = 0; i < desktopPane.getComponentCount(); i++) {
                 if(line.split(":")[0].equals(desktopPane.getAllFrames()[i].getTitle())) {
                     frame1 = desktopPane.getAllFrames()[i];
-                    frame1.setLocation(Integer.parseInt(line.split(":")[1]), Integer.parseInt(line.split(":")[2]));
-                    frame1.setSize(Integer.parseInt(line.split(":")[3]), Integer.parseInt(line.split(":")[4]));
-                    frame1.setIcon(Boolean.parseBoolean(line.split(":")[5]));
-                    frame1.setMaximum(Boolean.parseBoolean(line.split(":")[6]));
+                    frame1.setLocation(parseIntDefault(line.split(":")[1]), parseIntDefault(line.split(":")[2]));
+                    if(parseIntDefault(line.split(":")[3]) <= 0 || parseIntDefault(line.split(":")[4]) <= 0){
+                        Logger.debug("Wrong size");
+                        frame1.setSize(350,350);
+                    }
+                    else {
+                        frame1.setSize(parseIntDefault(line.split(":")[3]), parseIntDefault(line.split(":")[4]));
+                    }
+                    if(parseBooleanDefault(line.split(":")[5]) && parseBooleanDefault(line.split(":")[6])) {
+                        Logger.debug("Wrong statement isIcon and isMaximum");
+                        frame1.setIcon(false);
+                        frame1.setMaximum(false);
+                        frame1.setSize(350,350);
+                    }
+                    else {
+                        frame1.setIcon(parseBooleanDefault(line.split(":")[5]));
+                        frame1.setMaximum(parseBooleanDefault(line.split(":")[6]));
+                    }
                 }
             }
         }
+    }
+
+    public int parseIntDefault(String s){
+        int res;
+        try {
+            res = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return 350;
+        }
+        return res;
+    }
+
+    public boolean parseBooleanDefault(String s){
+        boolean res;
+        try {
+            res = Boolean.parseBoolean(s);
+        } catch (Exception e) {
+            return false;
+        }
+        return res;
     }
 }
