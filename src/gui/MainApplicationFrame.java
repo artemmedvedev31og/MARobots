@@ -13,6 +13,7 @@ import static gui.GenerateMenu.*;
 
 public class MainApplicationFrame extends JFrame
 {
+    public Localization loc = new Localization();
     private final JDesktopPane desktopPane = new JDesktopPane();
     State pos = new State();
     
@@ -36,6 +37,8 @@ public class MainApplicationFrame extends JFrame
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+
+        loc.setLanguage("Русский", this);
 
         exitOnClose(this, desktopPane);
     }
@@ -61,16 +64,15 @@ public class MainApplicationFrame extends JFrame
     {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu languageMenu = generateMenu("Localization", "Language choose", KeyEvent.VK_L);
-        languageMenu.add(generateLanguageMenu(this, "English", menuBar));
-        languageMenu.add(generateLanguageMenu(this, "Russian", menuBar));
+        JMenu languageMenu = generateMenu("Language", "Language choose", KeyEvent.VK_L);
+        languageMenu.add(generateLanguageMenu(this, "English"));
+        languageMenu.add(generateLanguageMenu(this, "Russian"));
 
-        JMenu lookAndFeelMenu = generateMenu("Scheme", "Managing the application display mode", KeyEvent.VK_V);
+        JMenu lookAndFeelMenu = generateMenu("Scheme", "Controlling the display mode of the application display", KeyEvent.VK_V);
         lookAndFeelMenu.add(generateSystemAndCrossplatformLookAndFeel(this, UIManager.getSystemLookAndFeelClassName(), "System scheme"));
         lookAndFeelMenu.add(generateSystemAndCrossplatformLookAndFeel(this, UIManager.getCrossPlatformLookAndFeelClassName(), "Crossplatform scheme"));
-
-        JMenu testMenu = generateMenu("Tests", "Test commands", KeyEvent.VK_T);
-        testMenu.add(generateLogMesssageItem("Message in log", "Новая строка"));
+        JMenu testMenu = generateMenu("Tests", "Tests commands", KeyEvent.VK_T);
+        testMenu.add(generateLogMesssageItem("Message in Log"));
 
         menuBar.add(languageMenu);
         menuBar.add(lookAndFeelMenu);
@@ -89,7 +91,7 @@ public class MainApplicationFrame extends JFrame
                 } catch (IOException ex) {
                     throw new RuntimeException(ex);
                 }
-                createConfirmExit(frame, "Вы хотите закрыть приложение?", "Выход из приложения");
+                createConfirmExit(frame);
             }
         });
     }

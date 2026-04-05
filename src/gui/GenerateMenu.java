@@ -32,12 +32,12 @@ public class GenerateMenu extends JFrame {
         return menu;
     }
 
-    public static JMenuItem generateLanguageMenu(Frame frame, String title, JMenuBar menuBar) {
+    public static JMenuItem generateLanguageMenu(JFrame frame, String title) {
         JMenuItem menuItem = new JMenuItem(title);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loc.changeLanguage(title, menuBar);
+                loc.setLanguage(title, frame);
                 SwingUtilities.updateComponentTreeUI(frame);
             }
         });
@@ -53,16 +53,16 @@ public class GenerateMenu extends JFrame {
         return systemAndCrossplatformLookAndFeel;
     }
 
-    public static JMenuItem generateLogMesssageItem(String title, String message) {
-        JMenuItem addLogMessageItem = new JMenuItem(title, KeyEvent.VK_S);
+    public static JMenuItem generateLogMesssageItem(String title) {
+        JMenuItem addLogMessageItem = new JMenuItem(title,KeyEvent.VK_S);
         addLogMessageItem.addActionListener((event) -> {
-            Logger.debug(message);
+            Logger.debug(loc.rb.getString("messageInLog"));
         });
         return addLogMessageItem;
     }
 
     public static JMenuItem generateExitMenuItem(Frame frame, JDesktopPane desktopPane) {
-        JMenuItem exitMenu = new JMenuItem("Exit", KeyEvent.VK_E);
+        JMenuItem exitMenu = new JMenuItem(loc.rb.getString("exit"), KeyEvent.VK_E);
         exitMenu.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -78,11 +78,8 @@ public class GenerateMenu extends JFrame {
         return exitMenu;
     }
 
-    public static void createConfirmExit(Frame frame, String message, String title) {
-        UIManager.put("OptionPane.yesButtonText", "Да");
-        UIManager.put("OptionPane.noButtonText", "Нет");
-        int result = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION);
-
+    public static void createConfirmExit(Frame frame) {
+        int result = JOptionPane.showConfirmDialog(frame, loc.rb.getString("exitInDialog"), loc.rb.getString("exitName"), JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             System.exit(0);
         }
