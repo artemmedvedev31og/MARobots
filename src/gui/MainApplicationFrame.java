@@ -39,6 +39,7 @@ public class MainApplicationFrame extends JFrame
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
         loc.setLanguage("Русский", this);
+        SwingUtilities.updateComponentTreeUI(this);
 
         exitOnClose(this, desktopPane);
     }
