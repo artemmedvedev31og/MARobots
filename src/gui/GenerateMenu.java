@@ -6,14 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class GenerateMenu extends JFrame {
 
-    static Localization loc = new Localization();
+    static Locale locale = new Locale("ru", "RU");
+    static ResourceBundle rb = ResourceBundle.getBundle("ComponentsMenu_ru", locale);
     static State pos = new State();
+    static Localization loc = new Localization();
 
     private static void setLookAndFeel(String className, Frame frame) {
         try {
@@ -25,27 +28,38 @@ public class GenerateMenu extends JFrame {
         }
     }
 
-    public static JMenu generateMenu(String title, String description, int keyIvent) {
-        JMenu menu = new JMenu(title);
+    public static LocalizableMenu generateMenu(String title, String description, int keyIvent) {
+        LocalizableMenu menu = new LocalizableMenu(title, rb);
+        loc.components.add(menu);
+        menu.setText(rb.getString(title));
         menu.setMnemonic(keyIvent);
         menu.getAccessibleContext().setAccessibleDescription(description);
         return menu;
     }
 
     public static JMenuItem generateLanguageMenu(JFrame frame, String title) {
-        JMenuItem menuItem = new JMenuItem(title);
+        LocalizableMenuButtons menuItem = new LocalizableMenuButtons(title, rb);
+        loc.components.add(menuItem);
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                loc.setLanguage(title, frame);
-                SwingUtilities.updateComponentTreeUI(frame);
+                if(title.equalsIgnoreCase("English") || title.equalsIgnoreCase("Английский")) {
+                    locale = new Locale("en", "US");
+                    rb = ResourceBundle.getBundle("ComponentsMenu_en_US", locale);
+                }
+                else if(title.equalsIgnoreCase("Russian") || title.equalsIgnoreCase("Русский")){
+                    locale = new Locale("ru", "RU");
+                    rb = ResourceBundle.getBundle("ComponentsMenu_ru", locale);
+                }
+                loc.switchLanguage(rb, frame);
             }
         });
         return menuItem;
     }
 
     public static JMenuItem generateSystemAndCrossplatformLookAndFeel(Frame frame, String comp, String title) {
-        JMenuItem systemAndCrossplatformLookAndFeel = new JMenuItem(title, KeyEvent.VK_S);
+        LocalizableMenuButtons systemAndCrossplatformLookAndFeel = new LocalizableMenuButtons(title, rb);
+        loc.components.add(systemAndCrossplatformLookAndFeel);
         systemAndCrossplatformLookAndFeel.addActionListener((event) -> {
             setLookAndFeel(comp, frame);
             frame.invalidate();
@@ -53,16 +67,18 @@ public class GenerateMenu extends JFrame {
         return systemAndCrossplatformLookAndFeel;
     }
 
-    public static JMenuItem generateLogMesssageItem(String title) {
-        JMenuItem addLogMessageItem = new JMenuItem(title,KeyEvent.VK_S);
+    public static JMenuItem generateLogMesssageItem() {
+        LocalizableMenuButtons addLogMessageItem = new LocalizableMenuButtons("message", rb);
+        loc.components.add(addLogMessageItem);
         addLogMessageItem.addActionListener((event) -> {
-            Logger.debug(loc.rb.getString("messageInLog"));
+            Logger.debug(rb.getString("messageInLog"));
         });
         return addLogMessageItem;
     }
 
-    public static JMenuItem generateExitMenuItem(Frame frame, JDesktopPane desktopPane) {
-        JMenuItem exitMenu = new JMenuItem(loc.rb.getString("exit"), KeyEvent.VK_E);
+    public JMenuItem generateExitMenuItem(Frame frame, JDesktopPane desktopPane) {
+        LocalizableMenuButtons exitMenu = new LocalizableMenuButtons("exit", rb);
+        loc.components.add(exitMenu);
         exitMenu.addActionListener((new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -79,7 +95,7 @@ public class GenerateMenu extends JFrame {
     }
 
     public static void createConfirmExit(Frame frame) {
-        int result = JOptionPane.showConfirmDialog(frame, loc.rb.getString("exitInDialog"), loc.rb.getString("exitName"), JOptionPane.YES_NO_OPTION);
+        int result = JOptionPane.showConfirmDialog(frame, rb.getString("exitInDialog"), rb.getString("exitName"), JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             System.exit(0);
         }

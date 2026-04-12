@@ -25,10 +25,10 @@ public class State {
     public void writeState(JDesktopPane desktopPane) throws IOException {
         FileWriter fw = new FileWriter(position, false);
         JInternalFrame frame;
-        fw.write("Title" + ":" +  "X" + ":" + "Y" + ":" + "Width" + ":" + "Height" + ":" + "isIcon" + ":" + "isMaximum" + "\n");
+        fw.write("Name" + ":" +  "X" + ":" + "Y" + ":" + "Width" + ":" + "Height" + ":" + "isIcon" + ":" + "isMaximum" + "\n");
         for(int i = 0; i < desktopPane.getComponentCount(); i++) {
             frame = desktopPane.getAllFrames()[i];
-            fw.write(frame.getTitle() + ":"
+            fw.write(frame.getName() + ":"
                     + frame.getX() + ":" + frame.getY() + ":"
                     + (int)(frame.getSize().getWidth()) + ":" + (int)(frame.getSize().getHeight()) + ":"
                     + frame.isIcon() + ":" + frame.isMaximum() +"\n");
@@ -43,7 +43,7 @@ public class State {
         JInternalFrame frame1;
         while((line = br.readLine()) != null) {
             for(int i = 0; i < desktopPane.getComponentCount(); i++) {
-                if(line.split(":")[0].equals(desktopPane.getAllFrames()[i].getTitle())) {
+                if(line.split(":")[0].equals(desktopPane.getAllFrames()[i].getName())) {
                     frame1 = desktopPane.getAllFrames()[i];
                     frame1.setLocation(parseIntDefault(line.split(":")[1]), parseIntDefault(line.split(":")[2]));
                     if(parseIntDefault(line.split(":")[3]) <= 0 || parseIntDefault(line.split(":")[4]) <= 0){

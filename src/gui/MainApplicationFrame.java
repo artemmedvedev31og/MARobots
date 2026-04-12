@@ -13,9 +13,9 @@ import static gui.GenerateMenu.*;
 
 public class MainApplicationFrame extends JFrame
 {
-    public Localization loc = new Localization();
     private final JDesktopPane desktopPane = new JDesktopPane();
     State pos = new State();
+    GenerateMenu gm = new GenerateMenu();
     
     public MainApplicationFrame() throws IOException, PropertyVetoException {
         State state = new State();
@@ -29,16 +29,21 @@ public class MainApplicationFrame extends JFrame
 
         LogWindow logWindow = createLogWindow();
         addWindow(logWindow);
+        GenerateMenu.loc.components.add(logWindow);
 
         GameWindow gameWindow = new GameWindow();
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
+        GenerateMenu.loc.components.add(gameWindow);
+
+        logWindow.setName("logWindow");
+        gameWindow.setName("gameWindow");
+
         state.readState(desktopPane);
 
         setJMenuBar(generateMenuBar());
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 
-        loc.setLanguage("Русский", this);
         SwingUtilities.updateComponentTreeUI(this);
 
         exitOnClose(this, desktopPane);
@@ -65,20 +70,20 @@ public class MainApplicationFrame extends JFrame
     {
         JMenuBar menuBar = new JMenuBar();
 
-        JMenu languageMenu = generateMenu("Language", "Language choose", KeyEvent.VK_L);
-        languageMenu.add(generateLanguageMenu(this, "English"));
-        languageMenu.add(generateLanguageMenu(this, "Russian"));
+        JMenu languageMenu = generateMenu("language", "Language choose", KeyEvent.VK_L);
+        languageMenu.add(generateLanguageMenu(this, "english"));
+        languageMenu.add(generateLanguageMenu(this, "russian"));
 
-        JMenu lookAndFeelMenu = generateMenu("Scheme", "Controlling the display mode of the application display", KeyEvent.VK_V);
-        lookAndFeelMenu.add(generateSystemAndCrossplatformLookAndFeel(this, UIManager.getSystemLookAndFeelClassName(), "System scheme"));
-        lookAndFeelMenu.add(generateSystemAndCrossplatformLookAndFeel(this, UIManager.getCrossPlatformLookAndFeelClassName(), "Crossplatform scheme"));
-        JMenu testMenu = generateMenu("Tests", "Tests commands", KeyEvent.VK_T);
-        testMenu.add(generateLogMesssageItem("Message in Log"));
+        JMenu lookAndFeelMenu = generateMenu("scheme", "Controlling the display mode of the application display", KeyEvent.VK_V);
+        lookAndFeelMenu.add(generateSystemAndCrossplatformLookAndFeel(this, UIManager.getSystemLookAndFeelClassName(), "systemScheme"));
+        lookAndFeelMenu.add(generateSystemAndCrossplatformLookAndFeel(this, UIManager.getCrossPlatformLookAndFeelClassName(), "crossplatformScheme"));
+        JMenu testMenu = generateMenu("tests", "Тестовые команды", KeyEvent.VK_T);
+        testMenu.add(generateLogMesssageItem());
 
         menuBar.add(languageMenu);
         menuBar.add(lookAndFeelMenu);
         menuBar.add(testMenu);
-        menuBar.add(generateExitMenuItem(this, desktopPane));
+        menuBar.add(gm.generateExitMenuItem(this, desktopPane));
 
         return menuBar;
     }

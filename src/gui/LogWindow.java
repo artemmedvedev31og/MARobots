@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.TextArea;
+import java.util.ResourceBundle;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
@@ -11,7 +12,7 @@ import log.LogChangeListener;
 import log.LogEntry;
 import log.LogWindowSource;
 
-public class LogWindow extends JInternalFrame implements LogChangeListener
+public class LogWindow extends JInternalFrame implements LogChangeListener, LocaleOne
 {
     private LogWindowSource m_logSource;
     private TextArea m_logContent;
@@ -46,5 +47,10 @@ public class LogWindow extends JInternalFrame implements LogChangeListener
     public void onLogChanged()
     {
         EventQueue.invokeLater(this::updateLogContent);
+    }
+
+    @Override
+    public void updateText(ResourceBundle rb) {
+        this.setTitle(rb.getString("logWindow"));
     }
 }
