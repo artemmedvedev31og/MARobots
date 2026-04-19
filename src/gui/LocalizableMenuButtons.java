@@ -1,7 +1,6 @@
 package gui;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 public class LocalizableMenuButtons extends JMenuItem implements LocaleOne {

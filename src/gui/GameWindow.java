@@ -2,7 +2,7 @@ package gui;
 
 import log.LogWindowSource;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.util.ResourceBundle;
 
 import javax.swing.JInternalFrame;
@@ -11,10 +11,12 @@ import javax.swing.JPanel;
 public class GameWindow extends JInternalFrame implements LocaleOne
 {
     private final GameVisualizer m_visualizer;
-    public GameWindow()
+    private final RobotModel m_robotModel;
+    public GameWindow(RobotModel robotModel)
     {
         super("Игровое поле", true, true, true, true);
-        m_visualizer = new GameVisualizer();
+        m_robotModel = robotModel;
+        m_visualizer = new GameVisualizer(robotModel);
         JPanel panel = new JPanel(new BorderLayout());
         panel.add(m_visualizer, BorderLayout.CENTER);
         getContentPane().add(panel);
