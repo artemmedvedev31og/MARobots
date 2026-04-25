@@ -11,6 +11,7 @@ import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 public class RobotModel implements RobotObservable{
 
     private final Timer m_timer = initTimer();
+    private final TargetModel m_targetModel;
     private final List<RobotObserver> listeners = new ArrayList<>();
 
     private static Timer initTimer()
@@ -22,9 +23,6 @@ public class RobotModel implements RobotObservable{
     private volatile double m_robotPositionX = 100;
     private volatile double m_robotPositionY = 100;
     private volatile double m_robotDirection = 0;
-
-    private volatile int m_targetPositionX = 150;
-    private volatile int m_targetPositionY = 100;
 
     private volatile double m_angle = 0;
 
@@ -39,14 +37,6 @@ public class RobotModel implements RobotObservable{
         return m_robotPositionY;
     }
 
-    public int getM_targetPositionX() {
-        return m_targetPositionX;
-    }
-
-    public int getM_targetPositionY() {
-        return m_targetPositionY;
-    }
-
     public double getM_robotDirection() {
         return m_robotDirection;
     }
@@ -55,8 +45,9 @@ public class RobotModel implements RobotObservable{
         return m_timer;
     }
 
-    public RobotModel()
+    public RobotModel(TargetModel targetModel)
     {
+        m_targetModel = targetModel;
         m_timer.schedule(new TimerTask()
         {
             @Override
@@ -70,16 +61,11 @@ public class RobotModel implements RobotObservable{
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                setTargetPosition(e.getPoint());
+                targetModel.setTargetPosition(e.getPoint());
             }
         });
     }
 
-    protected void setTargetPosition(Point p)
-    {
-        m_targetPositionX = p.x;
-        m_targetPositionY = p.y;
-    }
 
     private static double distance(double x1, double y1, double x2, double y2)
     {
@@ -98,14 +84,14 @@ public class RobotModel implements RobotObservable{
 
     protected void onModelUpdateEvent()
     {
-        double distance = distance(m_targetPositionX, m_targetPositionY,
+        double distance = distance(m_targetModel.getM_targetPositionX(), m_targetModel.getM_targetPositionY(),
                 m_robotPositionX, m_robotPositionY);
         if (distance < 0.5)
         {
             return;
         }
         double velocity = maxVelocity;
-        double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetPositionX, m_targetPositionY);
+        double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetModel.getM_targetPositionX(), m_targetModel.getM_targetPositionY());
         m_angle = angleToTarget * (180 / Math.PI);
         compareAngle(angleToTarget, m_robotDirection, velocity);
 
@@ -114,16 +100,19 @@ public class RobotModel implements RobotObservable{
 
     private void compareAngle(double angleToTarget, double direction, double velocity){
         double diff = angleToTarget - direction;
-        double angularVelocity = maxAngularVelocity;
+        double angularVelocity = 0;
+
         diff = asNormalizedRadians(diff);
-        if (diff > Math.PI)
-            angularVelocity *= -1;
-        if(diff > 0.2 || diff < -0.2){
-            moveRobot(0, angularVelocity, 10);
+
+        if(diff > Math.PI){
+            angularVelocity = -maxAngularVelocity;
         }
-        else{
-            moveRobot(velocity, angularVelocity, 10);
+
+        else if(diff > 0){
+            angularVelocity = maxAngularVelocity;
         }
+
+        moveRobot(velocity, angularVelocity, 10);
     }
 
 

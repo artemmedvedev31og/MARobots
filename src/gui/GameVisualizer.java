@@ -16,9 +16,11 @@ import javax.swing.JPanel;
 public class GameVisualizer extends JPanel
 {
     private final RobotModel m_robotModel;
+    private final TargetModel m_targetModel;
 
-    public GameVisualizer(RobotModel model)
+    public GameVisualizer(RobotModel model, TargetModel targetModel)
     {
+        m_targetModel = targetModel;
         m_robotModel = model;
         m_robotModel.getM_timer().schedule(new TimerTask()
         {
@@ -41,7 +43,7 @@ public class GameVisualizer extends JPanel
             @Override
             public void mouseClicked(MouseEvent e)
             {
-                model.setTargetPosition(e.getPoint());
+                m_targetModel.setTargetPosition(e.getPoint());
                 repaint();
             }
         });
@@ -65,7 +67,7 @@ public class GameVisualizer extends JPanel
         super.paint(g);
         Graphics2D g2d = (Graphics2D)g;
         drawRobot(g2d, round(m_robotModel.getM_robotPositionX()), round(m_robotModel.getM_robotPositionY()), m_robotModel.getM_robotDirection());
-        drawTarget(g2d, m_robotModel.getM_targetPositionX(), m_robotModel.getM_targetPositionY());
+        drawTarget(g2d, m_targetModel.getM_targetPositionX(), m_targetModel.getM_targetPositionY());
     }
 
     private static void fillOval(Graphics g, int centerX, int centerY, int diam1, int diam2)

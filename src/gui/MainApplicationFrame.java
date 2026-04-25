@@ -16,7 +16,8 @@ public class MainApplicationFrame extends JFrame
     private final JDesktopPane desktopPane = new JDesktopPane();
     State pos = new State();
     GenerateMenu gm = new GenerateMenu();
-    RobotModel robotModel = new RobotModel();
+    TargetModel targetModel = new TargetModel();
+    RobotModel robotModel = new RobotModel(targetModel);
     
     public MainApplicationFrame() throws IOException, PropertyVetoException {
         State state = new State();
@@ -32,12 +33,13 @@ public class MainApplicationFrame extends JFrame
         addWindow(logWindow);
         GenerateMenu.loc.components.add(logWindow);
 
-        GameWindow gameWindow = new GameWindow(robotModel);
+        GameWindow gameWindow = new GameWindow(robotModel, targetModel);
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
         GenerateMenu.loc.components.add(gameWindow);
-        CoordinateWindow coordinateWindow = new CoordinateWindow(robotModel);
+        CoordinateWindow coordinateWindow = new CoordinateWindow(robotModel, targetModel);
         addWindow(coordinateWindow);
+        GenerateMenu.loc.components.add(coordinateWindow);
 
 
         coordinateWindow.setName("coordinateWindow");

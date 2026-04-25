@@ -1,3 +1,4 @@
-Title:X:Y:Width:Height:isIcon:isMaximum
-Игровое поле:447:147:400:400:false:false
-Протокол работы:10:10:212:525:false:false
+Name:X:Y:Width:Height:isIcon:isMaximum
+gameWindow:303:95:1577:932:false:false
+coordinateWindow:1040:62:512:225:false:false
+logWindow:64:403:212:525:false:false
