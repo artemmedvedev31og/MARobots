@@ -93,12 +93,12 @@ public class RobotModel implements RobotObservable{
         double velocity = maxVelocity;
         double angleToTarget = angleTo(m_robotPositionX, m_robotPositionY, m_targetModel.getM_targetPositionX(), m_targetModel.getM_targetPositionY());
         m_angle = angleToTarget * (180 / Math.PI);
-        compareAngle(angleToTarget, m_robotDirection, velocity);
+        compareAngle(angleToTarget, m_robotDirection, velocity, distance);
 
         notifyListeners();
     }
 
-    private void compareAngle(double angleToTarget, double direction, double velocity){
+    private void compareAngle(double angleToTarget, double direction, double velocity, double distance){
         double diff = angleToTarget - direction;
         double angularVelocity = 0;
 
@@ -112,7 +112,18 @@ public class RobotModel implements RobotObservable{
             angularVelocity = maxAngularVelocity;
         }
 
-        moveRobot(velocity, angularVelocity, 10);
+        boolean isLookAtTarget = (diff < 0.05 || diff > 2 * Math.PI - 0.05);
+
+        if(isLookAtTarget){
+            angularVelocity = 0;
+        }
+
+        if(distance < 100 && !isLookAtTarget){
+            moveRobot(0.015, angularVelocity, 10);
+        }
+        else{
+            moveRobot(velocity, angularVelocity, 10);
+        }
     }
 
 
