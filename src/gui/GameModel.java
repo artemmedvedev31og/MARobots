@@ -1,6 +1,5 @@
 package gui;
 
-import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.*;
@@ -8,7 +7,7 @@ import java.util.List;
 
 import static com.sun.java.accessibility.util.AWTEventMonitor.addMouseListener;
 
-public class RobotModel implements RobotObservable{
+public class GameModel implements RobotObservable{
 
     private final Timer m_timer = initTimer();
     private final TargetModel m_targetModel;
@@ -45,7 +44,7 @@ public class RobotModel implements RobotObservable{
         return m_timer;
     }
 
-    public RobotModel(TargetModel targetModel)
+    public GameModel(TargetModel targetModel)
     {
         m_targetModel = targetModel;
         m_timer.schedule(new TimerTask()

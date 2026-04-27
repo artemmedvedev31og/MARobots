@@ -17,7 +17,7 @@ public class MainApplicationFrame extends JFrame
     State pos = new State();
     GenerateMenu gm = new GenerateMenu();
     TargetModel targetModel = new TargetModel();
-    RobotModel robotModel = new RobotModel(targetModel);
+    GameModel gameModel = new GameModel(targetModel);
     
     public MainApplicationFrame() throws IOException, PropertyVetoException {
         State state = new State();
@@ -33,11 +33,11 @@ public class MainApplicationFrame extends JFrame
         addWindow(logWindow);
         GenerateMenu.loc.components.add(logWindow);
 
-        GameWindow gameWindow = new GameWindow(robotModel, targetModel);
+        GameWindow gameWindow = new GameWindow(gameModel, targetModel);
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
         GenerateMenu.loc.components.add(gameWindow);
-        CoordinateWindow coordinateWindow = new CoordinateWindow(robotModel, targetModel);
+        CoordinateWindow coordinateWindow = new CoordinateWindow(gameModel, targetModel);
         addWindow(coordinateWindow);
         GenerateMenu.loc.components.add(coordinateWindow);
 
