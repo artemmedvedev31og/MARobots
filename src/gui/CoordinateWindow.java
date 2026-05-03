@@ -2,6 +2,7 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 public class CoordinateWindow extends JInternalFrame implements RobotObserver, LocaleOne {
@@ -27,13 +28,12 @@ public class CoordinateWindow extends JInternalFrame implements RobotObserver, L
 
     public void updateRobotContent(){
         StringBuilder content = new StringBuilder();
-        content.append("Robot: ").append("\n")
-                .append("X: ").append(String.format("%.1f", m_gameModel.getM_robotPositionX())).append("\n")
-                .append("Y: ").append(String.format("%.1f", m_gameModel.getM_robotPositionY())).append("\n")
-                .append("Direction: ").append(String.format("%.1f", m_gameModel.getM_robotDirection() * (180 / Math.PI))).append("\n")
-                .append("Target X: ").append(m_targetModel.getM_targetPositionX()).append("\n")
-                .append("Target Y: ").append(m_targetModel.getM_targetPositionY()).append("\n")
-                .append("Angle to Target: ").append(String.format("%.1f", m_gameModel.getM_angle())).append("\n");
+        ResourceBundle rb = GenerateMenu.rb;
+        content.append(rb.getString("robot")).append("\n")
+                .append(MessageCache.getFormatted(rb, "xAndY", m_gameModel.getM_robotPositionX(), m_gameModel.getM_robotPositionY())).append("\n")
+                .append(MessageCache.getFormatted(rb, "direction", m_gameModel.getM_robotDirection() * (180/Math.PI))).append("\n")
+                .append(MessageCache.getFormatted(rb, "targetXAndY", m_targetModel.getM_targetPositionX(), m_targetModel.getM_targetPositionY())).append("\n")
+                .append(MessageCache.getFormatted(rb, "angleToTarget", m_gameModel.getM_angle())).append("\n");
         m_robotContent.setText(content.toString());
         m_robotContent.invalidate();
     }

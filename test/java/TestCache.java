@@ -38,7 +38,7 @@ public class TestCache {
             String.format(formatterPattern, args[0], args[1]);
         }
         long endFormat = System.nanoTime();
-        long endFormatter = (endFormat - startFormatter) / 1000000;
+        long durationFormatter = (endFormat - startFormatter) / 1000000;
 
         long startNoCache = System.nanoTime();
         for (int i = 0; i < ITERATIONS; i++) {
@@ -54,7 +54,7 @@ public class TestCache {
         long endCache = System.nanoTime();
         long durationCache = (endCache - startCache) / 1000000;
         System.out.println("Результаты теста:");
-        System.out.println("Formatter: " + endFormatter + "ms");
+        System.out.println("Formatter: " + durationFormatter + "ms");
         System.out.println("MessageFormat без кэша: " + durationNoCache + " ms");
         System.out.println("MessageFormat с кэшем: " + durationCache + " ms");
     }

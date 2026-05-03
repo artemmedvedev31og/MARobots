@@ -1,4 +1,4 @@
 Name:X:Y:Width:Height:isIcon:isMaximum
-coordinateWindow:1040:62:512:225:false:false
 gameWindow:644:372:400:400:false:false
 logWindow:64:403:571:525:false:false
+coordinateWindow:1040:62:512:225:false:false
