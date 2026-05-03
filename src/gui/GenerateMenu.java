@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -71,7 +73,9 @@ public class GenerateMenu extends JFrame {
         LocalizableMenuButtons addLogMessageItem = new LocalizableMenuButtons("message", rb);
         loc.components.add(addLogMessageItem);
         addLogMessageItem.addActionListener((event) -> {
-            Logger.debug(rb.getString("messageInLog"));
+            String time = new SimpleDateFormat("HH:mm:ss", locale).format(new Date());
+            String messageFormatted = MessageCache.getFormatted(rb, "messageInLog", time, "Test");
+            Logger.debug(messageFormatted);
         });
         return addLogMessageItem;
     }
