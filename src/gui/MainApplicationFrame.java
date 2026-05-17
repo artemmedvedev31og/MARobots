@@ -18,6 +18,7 @@ public class MainApplicationFrame extends JFrame
     GenerateMenu gm = new GenerateMenu();
     TargetModel targetModel = new TargetModel();
     GameModel gameModel = new GameModel(targetModel);
+    GameWindow gameWindow;
     
     public MainApplicationFrame() throws IOException, PropertyVetoException {
         State state = new State();
@@ -33,7 +34,7 @@ public class MainApplicationFrame extends JFrame
         addWindow(logWindow);
         GenerateMenu.loc.components.add(logWindow);
 
-        GameWindow gameWindow = new GameWindow(gameModel, targetModel);
+        gameWindow = new GameWindow(gameModel, targetModel);
         gameWindow.setSize(400, 400);
         addWindow(gameWindow);
         GenerateMenu.loc.components.add(gameWindow);
@@ -76,6 +77,10 @@ public class MainApplicationFrame extends JFrame
     {
         JMenuBar menuBar = new JMenuBar();
 
+        JMenu uploadMenu = generateMenu("upload", "upload classes", KeyEvent.VK_U);
+        uploadMenu.add(generateUploadMenu("upload", gameModel, gameWindow.getM_visualizer()));
+        uploadMenu.add(generateResetRobotMenu(gameModel, gameWindow.getM_visualizer()));
+
         JMenu languageMenu = generateMenu("language", "Language choose", KeyEvent.VK_L);
         languageMenu.add(generateLanguageMenu(this, "english"));
         languageMenu.add(generateLanguageMenu(this, "russian"));
@@ -86,6 +91,7 @@ public class MainApplicationFrame extends JFrame
         JMenu testMenu = generateMenu("tests", "Тестовые команды", KeyEvent.VK_T);
         testMenu.add(generateLogMesssageItem());
 
+        menuBar.add(uploadMenu);
         menuBar.add(languageMenu);
         menuBar.add(lookAndFeelMenu);
         menuBar.add(testMenu);

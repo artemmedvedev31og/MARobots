@@ -7,7 +7,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -19,6 +21,7 @@ public class GenerateMenu extends JFrame {
     static ResourceBundle rb = ResourceBundle.getBundle("ComponentsMenu_ru", locale);
     static State pos = new State();
     static Localization loc = new Localization();
+    static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", locale);
 
     private static void setLookAndFeel(String className, Frame frame) {
         try {
@@ -38,6 +41,36 @@ public class GenerateMenu extends JFrame {
         menu.getAccessibleContext().setAccessibleDescription(description);
         return menu;
     }
+
+    public static JMenuItem generateResetRobotMenu(GameModel model, GameVisualizer visualizer) {
+        JMenuItem item = new JMenuItem("Сбросить робота");
+        item.addActionListener(e -> {
+            model.setBehavior(new DefaultRobotBehavior());
+            visualizer.setRobotView(new DefaulRobotView());
+            Logger.debug("Робот сброшен к заводским настройкам");
+        });
+        return item;
+    }
+
+
+    public static JMenuItem generateUploadMenu(String title, GameModel model, GameVisualizer visualizer) {
+        LocalizableMenuButtons menu = new LocalizableMenuButtons(title, rb);
+        menu.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Logger.debug("Меню загрузки открыто");
+                try {
+                    FileChooserMenu fileChooserMenu = new FileChooserMenu(model, visualizer);
+                } catch (MalformedURLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        return menu;
+    }
+
 
     public static JMenuItem generateLanguageMenu(JFrame frame, String title) {
         LocalizableMenuButtons menuItem = new LocalizableMenuButtons(title, rb);
@@ -73,7 +106,7 @@ public class GenerateMenu extends JFrame {
         LocalizableMenuButtons addLogMessageItem = new LocalizableMenuButtons("message", rb);
         loc.components.add(addLogMessageItem);
         addLogMessageItem.addActionListener((event) -> {
-            String time = new SimpleDateFormat("HH:mm:ss", locale).format(new Date());
+            String time = sdf.format(new Date());
             String messageFormatted = MessageCache.getFormatted(rb, "messageInLog", time, "Test");
             Logger.debug(messageFormatted);
         });

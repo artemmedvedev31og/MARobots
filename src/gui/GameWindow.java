@@ -8,6 +8,10 @@ import javax.swing.JPanel;
 
 public class GameWindow extends JInternalFrame implements LocaleOne
 {
+    public GameVisualizer getM_visualizer() {
+        return m_visualizer;
+    }
+
     private final GameVisualizer m_visualizer;
     private final GameModel m_gameModel;
     private final TargetModel m_targetModel;
