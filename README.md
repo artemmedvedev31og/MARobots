@@ -8,7 +8,7 @@
    - `RobotBehavior` — логика движения (метод `calculate`)
    - `RobotView` — отрисовка (метод `draw`)
 
-2. **Включите в JAR** необходимые DTO-классы: `RobotState`, `TargetState`, `Movement`
+2. **Включите в JAR** необходимые DTO-классы: `RobotState`, `TargetState`, `Movement`, и 2 класса со своей реализацией поведения и отрисовкой самого робота, например класс с поведением танка `TankBehavior` и класс с отрисовкой `TankView`.
 
 3. **Загрузите в приложение:**
    - Меню **Upload** → **Upload classes**
