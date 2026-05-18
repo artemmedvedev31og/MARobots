@@ -17,7 +17,7 @@ public class DefaulRobotView implements RobotView {
     }
 
     @Override
-    public void redraw(Graphics2D g, int x, int y, double direction, GameModel model)
+    public void redraw(Graphics2D g, int x, int y, double direction)
     {
         AffineTransform t = g.getTransform();
         g.rotate(direction,x,y);

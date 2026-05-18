@@ -65,8 +65,7 @@ public class GameVisualizer extends JPanel
                 g2d,
                 round(m_gameModel.getM_robotPositionX()),
                 round(m_gameModel.getM_robotPositionY()),
-                m_gameModel.getM_robotDirection(),
-                m_gameModel
+                m_gameModel.getM_robotDirection()
         );
 
         drawTarget(g2d,m_targetModel.getM_targetPositionX(),m_targetModel.getM_targetPositionY());
@@ -90,6 +89,4 @@ public class GameVisualizer extends JPanel
     public void setRobotView(RobotView view){
         this.m_robotView = view;
     }
-
-
 }
