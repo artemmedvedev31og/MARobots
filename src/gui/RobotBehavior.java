@@ -1,5 +1,5 @@
 package gui;
 
 public interface RobotBehavior {
-    void setModel(TargetModel target, GameModel model);
+    Movement calculate(TargetState target, RobotState robot);
 }

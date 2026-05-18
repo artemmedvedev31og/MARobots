@@ -1,5 +1,7 @@
 package gui;
 
+import log.Logger;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
@@ -49,9 +51,11 @@ public class FileChooserMenu extends JFrame {
 
                 if (RobotBehavior.class.isAssignableFrom(cls) && !cls.isInterface()) {
                     model.setBehavior((RobotBehavior) cls.getDeclaredConstructor().newInstance());
+                    Logger.debug("Загружен класс " + className);
                 }
                 if (RobotView.class.isAssignableFrom(cls) && !cls.isInterface()) {
                     visualizer.setRobotView((RobotView) cls.getDeclaredConstructor().newInstance());
+                    Logger.debug("Загружен класс " + className);
                 }
             }
         }
